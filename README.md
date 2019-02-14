@@ -11,6 +11,7 @@
   <li> Spring-data-jpa  </li>
   <li> Apache Derby Repository  </li>
   <li> Lombok  </li>
+  <li> Logback </li>
   <li> JDK 8  </li>
 </ul>
 
@@ -22,6 +23,6 @@
 * Includes Unit Testcases to test business services
 * Implemented with Spring Data JPA 
 * Implemented with Apache Derby embedded database
-* Effective exception handling
+* Effective exception handling and Logging
 
 ---
