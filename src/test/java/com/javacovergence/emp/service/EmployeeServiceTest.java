@@ -1,5 +1,7 @@
 package com.javacovergence.emp.service;
 
+import static org.junit.jupiter.api.Assertions.assertThrows;
+import static org.junit.jupiter.api.Assertions.assertTrue;
 import static org.mockito.Mockito.doNothing;
 
 import java.util.ArrayList;
@@ -8,14 +10,13 @@ import java.util.List;
 import java.util.Optional;
 
 import org.apache.commons.collections.CollectionUtils;
-import org.junit.Assert;
-import org.junit.Test;
-import org.junit.runner.RunWith;
+import org.junit.jupiter.api.Test;
+import org.junit.jupiter.api.extension.ExtendWith;
 import org.mockito.Mockito;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.mock.mockito.MockBean;
 import org.springframework.test.context.ContextConfiguration;
-import org.springframework.test.context.junit4.SpringRunner;
+import org.springframework.test.context.junit.jupiter.SpringExtension;
 
 import com.javaconvergence.emp.entity.Employee;
 import com.javaconvergence.emp.exception.EmployeeDetaileAlreadyExistsException;
@@ -24,7 +25,7 @@ import com.javaconvergence.emp.repository.EmployeeRepository;
 import com.javaconvergence.emp.service.EmployeeService;
 import com.javaconvergence.emp.service.EmployeeServiceImpl;
 
-@RunWith(SpringRunner.class)
+@ExtendWith(SpringExtension.class)
 @ContextConfiguration(classes = { EmployeeServiceImpl.class })
 public class EmployeeServiceTest {
 
@@ -44,7 +45,7 @@ public class EmployeeServiceTest {
 		Mockito.when(employeeRepository.findAll()).thenReturn(listOfEmployees);
 
 		List<Employee> result = employeeService.getAllEmployees();
-		Assert.assertTrue(CollectionUtils.isEqualCollection(listOfEmployees, result));
+		assertTrue(CollectionUtils.isEqualCollection(listOfEmployees, result));
 
 	}
 
@@ -54,15 +55,15 @@ public class EmployeeServiceTest {
 		Mockito.when(employeeRepository.save(newEmploye)).thenReturn(newEmploye);
 		Mockito.when(employeeRepository.findById(newEmploye.getEmpId())).thenReturn(Optional.empty());
 		employeeService.addEmployee(newEmploye);
-		Assert.assertTrue(1011l == newEmploye.getEmpId());
+		assertTrue(1011l == newEmploye.getEmpId());
 	}
 
-	@Test(expected = EmployeeDetaileAlreadyExistsException.class)
+	@Test
 	public void addEmployee_withExceptionTest() {
 		Employee existingEmploye = new Employee(1001l, "Ram", "Chandran", "01234567890");
 		Mockito.when(employeeRepository.findById(existingEmploye.getEmpId())).thenReturn(Optional.of(existingEmploye));
 		Mockito.when(employeeRepository.save(existingEmploye)).thenReturn(existingEmploye);
-		employeeService.addEmployee(existingEmploye);
+		assertThrows(EmployeeDetaileAlreadyExistsException.class, () -> employeeService.addEmployee(existingEmploye));
 	}
 
 	@Test
@@ -71,15 +72,15 @@ public class EmployeeServiceTest {
 		Mockito.when(employeeRepository.save(existingEmploye)).thenReturn(existingEmploye);
 		Mockito.when(employeeRepository.findById(existingEmploye.getEmpId())).thenReturn(Optional.of(existingEmploye));
 		employeeService.saveEmployee(existingEmploye);
-		Assert.assertTrue(1001l == existingEmploye.getEmpId());
+		assertTrue(1001l == existingEmploye.getEmpId());
 	}
 
-	@Test(expected = EmployeeDetailsNotFound.class)
+	@Test
 	public void saveEmployee_withExceptionTest() {
 		Employee newEmploye = new Employee(1011l, "Sam", "Pradeep", "01234567811");
 		Mockito.when(employeeRepository.findById(newEmploye.getEmpId())).thenReturn(Optional.empty());
 		Mockito.when(employeeRepository.save(newEmploye)).thenReturn(newEmploye);
-		employeeService.saveEmployee(newEmploye);
+		assertThrows(EmployeeDetailsNotFound.class, () -> employeeService.saveEmployee(newEmploye));
 	}
 
 	@Test
@@ -88,15 +89,15 @@ public class EmployeeServiceTest {
 		doNothing().when(employeeRepository).delete(existingEmploye);
 		Mockito.when(employeeRepository.findById(existingEmploye.getEmpId())).thenReturn(Optional.of(existingEmploye));
 		employeeService.saveEmployee(existingEmploye);
-		Assert.assertTrue(1001l == existingEmploye.getEmpId());
+		assertTrue(1001l == existingEmploye.getEmpId());
 	}
 
-	@Test(expected = EmployeeDetailsNotFound.class)
+	@Test
 	public void deleteEmployee_withExceptionTest() {
 		Employee newEmploye = new Employee(1011l, "Sam", "Pradeep", "01234567811");
 		Mockito.when(employeeRepository.findById(newEmploye.getEmpId())).thenReturn(Optional.empty());
 		doNothing().when(employeeRepository).delete(newEmploye);
-		employeeService.saveEmployee(newEmploye);
+		assertThrows(EmployeeDetailsNotFound.class, () -> employeeService.saveEmployee(newEmploye));
 	}
 
 }

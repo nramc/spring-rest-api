@@ -1,13 +1,14 @@
 package com.javacovergence.emp.controller;
 
+import static org.junit.jupiter.api.Assertions.assertEquals;
+
 import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.List;
 
-import org.junit.Assert;
-import org.junit.Before;
-import org.junit.Test;
-import org.junit.runner.RunWith;
+import org.junit.jupiter.api.BeforeEach;
+import org.junit.jupiter.api.Test;
+import org.junit.jupiter.api.extension.ExtendWith;
 import org.mockito.Mockito;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
@@ -17,7 +18,7 @@ import org.springframework.boot.test.mock.mockito.MockBean;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.MediaType;
 import org.springframework.test.context.ContextConfiguration;
-import org.springframework.test.context.junit4.SpringRunner;
+import org.springframework.test.context.junit.jupiter.SpringExtension;
 import org.springframework.test.web.servlet.MockMvc;
 import org.springframework.test.web.servlet.MvcResult;
 import org.springframework.test.web.servlet.RequestBuilder;
@@ -31,7 +32,7 @@ import com.javaconvergence.emp.exception.EmployeeDetaileAlreadyExistsException;
 import com.javaconvergence.emp.exception.EmployeeDetailsNotFound;
 import com.javaconvergence.emp.service.EmployeeService;
 
-@RunWith(SpringRunner.class)
+@ExtendWith(SpringExtension.class)
 @WebMvcTest
 @ContextConfiguration(classes = { EmployeeServiceController.class })
 public class EmployeeControllerTest {
@@ -51,7 +52,7 @@ public class EmployeeControllerTest {
 			new Employee(1001l, "Sharon", "Mukley", "01234567892"), new Employee(1001l, "Kam", "Ajula", "01234567893"),
 			new Employee(1001l, "Dheeps", "Shika", "01234567894")));
 
-	@Before
+	@BeforeEach
 	public void testSetup() {
 		Mockito.when(employeeService.getAllEmployees()).thenReturn(listOfEmployees);
 	}
@@ -64,13 +65,13 @@ public class EmployeeControllerTest {
 
 		LOGGER.info(mvcResult.getResponse().toString());
 
-		Assert.assertEquals(HttpStatus.OK.value(), mvcResult.getResponse().getStatus());
+		assertEquals(HttpStatus.OK.value(), mvcResult.getResponse().getStatus());
 
 		List<Employee> result = jsonMapper.readValue(mvcResult.getResponse().getContentAsString(),
 				new TypeReference<List<Employee>>() {
 				});
 
-		Assert.assertEquals(listOfEmployees.size(), result.size());
+		assertEquals(listOfEmployees.size(), result.size());
 
 	}
 
@@ -87,7 +88,7 @@ public class EmployeeControllerTest {
 
 		LOGGER.info(mvcResult.getResponse().toString());
 
-		Assert.assertEquals(HttpStatus.OK.value(), mvcResult.getResponse().getStatus());
+		assertEquals(HttpStatus.OK.value(), mvcResult.getResponse().getStatus());
 
 		/* Negative Scenarios */
 		Employee existingEmploye = new Employee(1001l, "Ram", "Chandran", "01234567890");
@@ -99,7 +100,7 @@ public class EmployeeControllerTest {
 
 		LOGGER.info(mvcResult.getResponse().toString());
 
-		Assert.assertEquals(HttpStatus.NOT_ACCEPTABLE.value(), mvcResult.getResponse().getStatus());
+		assertEquals(HttpStatus.NOT_ACCEPTABLE.value(), mvcResult.getResponse().getStatus());
 	}
 	
 	@Test
@@ -115,7 +116,7 @@ public class EmployeeControllerTest {
 
 		LOGGER.info(mvcResult.getResponse().toString());
 
-		Assert.assertEquals(HttpStatus.OK.value(), mvcResult.getResponse().getStatus());
+		assertEquals(HttpStatus.OK.value(), mvcResult.getResponse().getStatus());
 
 		/* Negative Scenarios */
 		Employee newEmploye = new Employee(1011l, "Sam", "Pradeep", "01234567811");
@@ -127,7 +128,7 @@ public class EmployeeControllerTest {
 
 		LOGGER.info(mvcResult.getResponse().toString());
 
-		Assert.assertEquals(HttpStatus.NOT_MODIFIED.value(), mvcResult.getResponse().getStatus());
+		assertEquals(HttpStatus.NOT_MODIFIED.value(), mvcResult.getResponse().getStatus());
 	}
 	
 	@Test
@@ -143,7 +144,7 @@ public class EmployeeControllerTest {
 
 		LOGGER.info(mvcResult.getResponse().toString());
 
-		Assert.assertEquals(HttpStatus.OK.value(), mvcResult.getResponse().getStatus());
+		assertEquals(HttpStatus.OK.value(), mvcResult.getResponse().getStatus());
 
 		/* Negative Scenarios */
 		Employee newEmploye = new Employee(1011l, "Sam", "Pradeep", "01234567811");
@@ -155,7 +156,7 @@ public class EmployeeControllerTest {
 
 		LOGGER.info(mvcResult.getResponse().toString());
 
-		Assert.assertEquals(HttpStatus.NOT_MODIFIED.value(), mvcResult.getResponse().getStatus());
+		assertEquals(HttpStatus.NOT_MODIFIED.value(), mvcResult.getResponse().getStatus());
 	}
 
 }
