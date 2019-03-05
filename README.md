@@ -6,7 +6,7 @@
 <b><i>Tools used</i></b>
 <ul>
   <li> Spring boot/ </li>
-  <li> JUnit  </li>
+  <li> JUnit 5 </li>
   <li> Maven build  </li>
   <li> Spring-data-jpa  </li>
   <li> Apache Derby Repository  </li>
